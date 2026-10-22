@@ -23,11 +23,18 @@ function createWindow() {
     }
   });
 
+  const indexPath = path.join(__dirname, '../dist/renderer/index.html');
   if (isDev && process.env.VITE_DEV_SERVER_URL) {
     mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
   } else {
-    mainWindow.loadFile(path.join(__dirname, '../dist/renderer/index.html'));
+    mainWindow.loadFile(indexPath).catch(err => {
+      console.error('Failed to load index.html:', err);
+    });
   }
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log('[HK OS] Desktop window loaded successfully');
+  });
 
   // Handle external links safely
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
