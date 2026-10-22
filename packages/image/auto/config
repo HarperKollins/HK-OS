@@ -1,0 +1,13 @@
+#!/bin/sh
+set -e
+
+# HK OS Ubuntu Image — live-build configuration
+# Base: Ubuntu 24.04 LTS (Noble Numbat)
+
+lb config \
+  --distribution noble \
+  --architectures amd64 \
+  --archive-areas "main restricted universe multiverse" \
+  --binary-images iso-hybrid \
+  --debian-installer false \
+  --bootappend-live "boot=live components quiet splash"

@@ -1,0 +1,33 @@
+# HK OS Core Package List
+# Pre-installed in the HK OS Ubuntu image
+
+# Desktop environment
+gnome-shell
+gnome-session
+gnome-terminal
+gnome-control-center
+nautilus
+
+# HK OS application dependencies
+curl
+git
+python3
+python3-pip
+nodejs
+npm
+
+# LibreOffice (MPL 2.0)
+libreoffice
+libreoffice-gnome
+
+# Multimedia
+ffmpeg
+
+# System utilities
+wget
+unzip
+apt-transport-https
+gpg
+
+# Fonts
+fonts-jetbrains-mono

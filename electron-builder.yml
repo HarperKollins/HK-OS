@@ -1,0 +1,32 @@
+appId: site.hkai.hkos
+productName: HK OS
+copyright: "Copyright © 2026 Harper Kollins / HK AI"
+directories:
+  output: dist-electron
+files:
+  - dist/renderer/**/*
+  - electron/**/*
+  - package.json
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: HK OS
+linux:
+  target:
+    - target: deb
+      arch:
+        - x64
+    - target: AppImage
+      arch:
+        - x64
+  category: Education

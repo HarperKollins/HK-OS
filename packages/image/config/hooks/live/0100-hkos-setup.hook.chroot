@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+
+echo "[HK OS] Running post-install setup hook..."
+
+# Install VSCodium (MIT license)
+wget -qO /tmp/vscodium.gpg https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+mkdir -p /usr/share/keyrings
+gpg --dearmor < /tmp/vscodium.gpg > /usr/share/keyrings/vscodium-archive-keyring.gpg
+echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' \
+  > /etc/apt/sources.list.d/vscodium.list
+apt-get update -qq
+apt-get install -y codium
+
+# JupyterLab via pip (BSD license)
+pip3 install --break-system-packages jupyterlab
+
+# HK OS home skeleton
+mkdir -p /etc/skel/HK-OS/Notes
+mkdir -p /etc/skel/HK-OS/Projects
+mkdir -p /etc/skel/HK-OS/Downloads
+
+echo "[HK OS] Setup hook complete."

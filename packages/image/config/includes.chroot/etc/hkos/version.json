@@ -1,0 +1,8 @@
+{
+  "name": "HK OS",
+  "version": "0.1.0",
+  "codename": "Pioneer",
+  "base": "Ubuntu 24.04 LTS",
+  "buildDate": "__BUILD_DATE__",
+  "buildCommit": "__BUILD_COMMIT__"
+}

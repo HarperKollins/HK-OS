@@ -1,0 +1,90 @@
+name: "HK OS — Build Ubuntu ISO"
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. v0.1.0)'
+        required: true
+        default: 'v0.1.0'
+
+jobs:
+  build-iso:
+    name: Build HK OS Ubuntu ISO
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install live-build dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y \
+            live-build \
+            debootstrap \
+            xorriso \
+            squashfs-tools \
+            mtools \
+            isolinux \
+            grub-pc-bin \
+            grub-efi-amd64-bin
+
+      - name: Verify build environment
+        run: |
+          echo "live-build: $(lb --version)"
+          echo "Disk: $(df -h . | tail -1)"
+          echo "RAM: $(free -h | grep Mem)"
+
+      - name: Set permissions
+        run: |
+          chmod +x packages/image/build.sh
+          chmod +x packages/image/config/hooks/live/0100-hkos-setup.hook.chroot
+
+      - name: Build HK OS ISO
+        working-directory: packages/image
+        env:
+          SOURCE_DATE_EPOCH: '1700000000'
+          GITHUB_SHA: ${{ github.sha }}
+        run: sudo ./build.sh
+
+      - name: Generate checksums
+        working-directory: packages/image
+        run: |
+          sha256sum *.iso > SHA256SUMS.txt
+          ls -lh *.iso
+          cat SHA256SUMS.txt
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: hk-os-iso-${{ github.run_number }}
+          path: |
+            packages/image/*.iso
+            packages/image/SHA256SUMS.txt
+          retention-days: 30
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            packages/image/*.iso
+            packages/image/SHA256SUMS.txt
+          body: |
+            ## HK OS ${{ github.ref_name }}
+
+            **Installation**
+            1. Download the `.iso` file
+            2. Verify checksum from `SHA256SUMS.txt`
+            3. Test in VMware: Create VM → Use ISO → 4GB RAM → 20GB disk → Boot
+
+            **System Requirements:** 64-bit CPU, 4GB RAM, 20GB storage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
