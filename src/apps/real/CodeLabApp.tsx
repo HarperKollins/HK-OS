@@ -89,44 +89,48 @@ export const CodeLabApp: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-hk-bg text-white font-sans">
+    <div className="h-full flex flex-col bg-[#000000] text-[#ddffdc] font-['Inter']">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-hk-border bg-hk-surface">
-        <div className="flex items-center gap-2">
-          <Code2 size={16} className="text-orange-400" />
-          <span className="text-sm font-semibold">Real Code Lab</span>
-          <span className="text-xs text-hk-muted">Python 3.11 Subprocess Engine</span>
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#485346] bg-[#181818]">
+        <div className="flex items-center gap-3">
+          <div className="w-6 h-6 rounded bg-[#212525] border border-[#485346] flex items-center justify-center text-[#7fee64]">
+            <Code2 size={14} />
+          </div>
+          <div>
+            <span className="text-xs font-medium text-[#ddffdc] font-['Space_Grotesk']">Python 3 Execution Engine</span>
+            <span className="text-[10px] text-[#8cab87] block font-mono">Projects/trajectory_solver.py</span>
+          </div>
         </div>
         <div className="flex items-center gap-2">
-          {saveStatus && <span className="text-xs text-hk-emerald font-mono">{saveStatus}</span>}
+          {saveStatus && <span className="text-xs text-[#7fee64] font-mono mr-1">{saveStatus}</span>}
           <button
             onClick={() => setCode(STARTER_CODE)}
-            className="flex items-center gap-1 px-2.5 py-1 text-xs border border-hk-border rounded text-hk-muted hover:text-white"
+            className="flex items-center gap-1 px-3 py-1 text-xs border border-[#485346] rounded-lg text-[#8cab87] hover:text-[#ddffdc] hover:border-[#8cab87] transition-all"
           >
             <RotateCcw size={11} /> Reset
           </button>
           <button
             onClick={handleSave}
-            className="flex items-center gap-1.5 px-3 py-1 text-xs border border-hk-border rounded text-white hover:bg-white/5"
+            className="flex items-center gap-1.5 px-3 py-1 text-xs border border-[#485346] rounded-lg text-[#ddffdc] bg-[#212525] hover:border-[#7fee64] transition-all"
           >
-            <Save size={12} /> Save to Projects
+            <Save size={12} /> Save
           </button>
           <button
             onClick={handleRun}
             disabled={running}
-            className="flex items-center gap-1.5 px-4 py-1 text-xs font-semibold rounded bg-hk-blue text-white hover:bg-hk-blue/90 disabled:opacity-50 transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-full bg-[#7fee64] text-[#000000] hover:brightness-110 disabled:opacity-50 transition-all shadow-[0_0_12px_rgba(127,238,100,0.3)]"
           >
-            <Play size={12} fill="white" /> {running ? 'Running...' : 'Run Python'}
+            <Play size={11} fill="#000000" /> {running ? 'Executing...' : 'Run Python'}
           </button>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Code Editor */}
-        <div className="flex-1 flex flex-col border-r border-hk-border">
-          <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col border-r border-[#485346]">
+          <div className="flex flex-1 overflow-hidden bg-[#000000]">
             {/* Line numbers */}
-            <div className="bg-hk-bg/80 border-r border-hk-border px-3 py-4 text-right select-none font-mono text-xs text-hk-muted/40 leading-6">
+            <div className="bg-[#181818]/60 border-r border-[#485346] px-3 py-4 text-right select-none font-mono text-xs text-[#485346] leading-6">
               {code.split('\n').map((_, i) => (
                 <div key={i}>{i + 1}</div>
               ))}
@@ -137,46 +141,46 @@ export const CodeLabApp: React.FC = () => {
               onChange={e => setCode(e.target.value)}
               onKeyDown={handleTabKey}
               spellCheck={false}
-              className="flex-1 bg-transparent text-hk-emerald font-mono text-xs leading-6 p-4 outline-none resize-none caret-white"
+              className="flex-1 bg-transparent text-[#ddffdc] font-mono text-xs leading-6 p-4 outline-none resize-none caret-[#7fee64]"
               style={{ fontFamily: 'JetBrains Mono, Fira Code, Consolas, monospace' }}
             />
           </div>
         </div>
 
         {/* Real Execution Output Console */}
-        <div className="w-80 flex flex-col bg-hk-surface/30">
-          <div className="px-3 py-2 border-b border-hk-border bg-hk-surface/60 flex items-center justify-between">
-            <span className="text-xs font-semibold text-hk-muted flex items-center gap-1.5">
-              <Terminal size={12} /> Subprocess Output
+        <div className="w-88 flex flex-col bg-[#181818]">
+          <div className="px-3.5 py-2.5 border-b border-[#485346] bg-[#212525] flex items-center justify-between">
+            <span className="text-[11px] uppercase tracking-[0.05em] font-medium text-[#9cbf93] flex items-center gap-1.5">
+              <Terminal size={12} className="text-[#7fee64]" /> Subprocess Console
             </span>
             {output && (
-              <span className={`text-[10px] font-mono flex items-center gap-1 ${output.success ? 'text-hk-emerald' : 'text-hk-red'}`}>
+              <span className={`text-[10px] font-mono flex items-center gap-1 ${output.success ? 'text-[#7fee64]' : 'text-[#f87171]'}`}>
                 {output.success ? <CheckCircle2 size={10} /> : <AlertCircle size={10} />}
                 Exit {output.exitCode} ({output.durationMs}ms)
               </span>
             )}
           </div>
 
-          <div className="flex-1 p-3 font-mono text-xs overflow-y-auto leading-relaxed">
+          <div className="flex-1 p-4 font-mono text-xs overflow-y-auto leading-relaxed bg-[#181818]">
             {running && (
-              <div className="text-hk-blue animate-pulse flex items-center gap-2">
-                <span className="inline-block w-2 h-2 rounded-full bg-hk-blue animate-ping" />
-                Spawning python process...
+              <div className="text-[#7fee64] flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#7fee64] animate-ping" />
+                Spawning python.exe subprocess...
               </div>
             )}
             {output && (
               <div className="space-y-2">
                 {output.stdout && (
-                  <pre className="text-white whitespace-pre-wrap">{output.stdout}</pre>
+                  <pre className="text-[#7fee64] whitespace-pre-wrap font-mono leading-5">{output.stdout}</pre>
                 )}
                 {output.stderr && (
-                  <pre className="text-hk-red whitespace-pre-wrap">{output.stderr}</pre>
+                  <pre className="text-[#f87171] whitespace-pre-wrap font-mono leading-5">{output.stderr}</pre>
                 )}
               </div>
             )}
             {!running && !output && (
-              <div className="text-hk-muted/60 text-center mt-12">
-                Click <span className="text-white">Run Python</span> to execute this script in a real local subprocess.
+              <div className="text-[#677d64] text-center mt-12 font-mono text-xs">
+                Click <span className="text-[#7fee64]">Run Python</span> to execute script in a host subprocess.
               </div>
             )}
           </div>

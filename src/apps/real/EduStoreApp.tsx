@@ -36,7 +36,7 @@ const CATALOG: CatalogItem[] = [
     icon: 'GraduationCap'
   },
   {
-    id: 'phET-sims',
+    id: 'phet-sims',
     name: 'PhET Interactive Simulations',
     category: 'Web Services',
     type: 'web',
@@ -151,57 +151,60 @@ export const EduStoreApp: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-hk-bg text-white font-sans">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-hk-border bg-hk-surface">
-        <div className="flex items-center gap-2">
-          <Store size={16} className="text-yellow-400" />
-          <span className="text-sm font-semibold">Real Edu-Store</span>
-          <span className="text-xs text-hk-muted">Real Manifests & Real Windows winget Installs</span>
+    <div className="h-full flex flex-col bg-[#000000] text-[#ddffdc] font-['Inter']">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#485346] bg-[#181818]">
+        <div className="flex items-center gap-2.5">
+          <Store size={15} className="text-[#7fee64]" />
+          <span className="text-xs font-semibold text-[#ddffdc] font-['Space_Grotesk']">Edu-Store Registry</span>
+          <span className="text-[11px] font-mono text-[#8cab87]">Verified Web Manifests & Host Winget Packages</span>
         </div>
-        <button onClick={() => loadApps()} className="p-1 text-hk-muted hover:text-white">
+        <button onClick={() => loadApps()} className="p-1 text-[#8cab87] hover:text-[#ddffdc]" title="Reload">
           <RefreshCw size={13} />
         </button>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* Catalog */}
-        <div className="flex-1 p-5 overflow-y-auto space-y-6">
+        <div className="flex-1 p-6 overflow-y-auto space-y-7">
           {['Web Services', 'Native Windows Software'].map(category => (
             <div key={category}>
-              <h2 className="text-xs uppercase tracking-wider text-hk-muted font-bold mb-3">{category}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <p className="text-[11px] uppercase tracking-[0.05em] text-[#9cbf93] font-medium mb-3">
+                {category}
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {CATALOG.filter(c => c.category === category).map(item => {
                   const installed = isInstalled(item.id);
                   const isCurrent = installingId === item.id;
                   return (
                     <div
                       key={item.id}
-                      className="p-4 rounded-xl border border-hk-border bg-hk-surface/60 flex flex-col justify-between"
+                      className="p-5 rounded-lg border border-[#485346] bg-[#1f2a33] hover:border-[#7fee64] flex flex-col justify-between transition-all duration-200"
                     >
                       <div>
-                        <div className="flex items-start justify-between">
-                          <h3 className="font-semibold text-sm text-white">{item.name}</h3>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-hk-bg border border-hk-border text-hk-muted">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-medium text-sm text-[#ddffdc] font-['Space_Grotesk']">{item.name}</h3>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full border border-[#485346] text-[#9cbf93] bg-[#181818] uppercase font-mono">
                             {item.type}
                           </span>
                         </div>
-                        <p className="text-xs text-hk-muted mt-1 leading-relaxed">{item.description}</p>
+                        <p className="text-xs text-[#8cab87] leading-relaxed">{item.description}</p>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-hk-border/40 flex items-center justify-between">
-                        <span className="text-[10px] font-mono text-hk-muted">
-                          {item.type === 'web' ? item.url : `winget: ${item.packageId}`}
+                      <div className="mt-5 pt-3 border-t border-[#485346]/50 flex items-center justify-between">
+                        <span className="text-[11px] font-mono text-[#677d64] truncate max-w-[180px]">
+                          {item.type === 'web' ? item.url : `id: ${item.packageId}`}
                         </span>
 
                         {installed ? (
-                          <span className="flex items-center gap-1 text-xs text-hk-emerald font-semibold">
-                            <CheckCircle size={13} /> In App Shelf
+                          <span className="flex items-center gap-1.5 text-xs text-[#7fee64] font-medium">
+                            <CheckCircle size={13} /> Installed
                           </span>
                         ) : (
                           <button
                             onClick={() => item.type === 'web' ? handleInstallWeb(item) : handleInstallNative(item)}
                             disabled={isCurrent}
-                            className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded bg-hk-blue text-white hover:bg-hk-blue/90 disabled:opacity-40"
+                            className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-semibold rounded-full bg-[#7fee64] text-[#000000] hover:brightness-110 disabled:opacity-40 transition-all shadow-[0_0_10px_rgba(127,238,100,0.25)]"
                           >
                             <Download size={12} /> {isCurrent ? 'Installing...' : 'Install'}
                           </button>
@@ -217,21 +220,21 @@ export const EduStoreApp: React.FC = () => {
 
         {/* Live Terminal Progress Log */}
         {(installingId || logs.length > 0) && (
-          <div className="w-80 border-l border-hk-border bg-hk-surface/30 p-4 flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between pb-2 border-b border-hk-border mb-2">
-              <span className="text-xs font-semibold flex items-center gap-1.5 text-white">
-                <Terminal size={12} /> Live Installation Log
+          <div className="w-88 border-l border-[#485346] bg-[#181818] p-4 flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between pb-2.5 border-b border-[#485346] mb-3">
+              <span className="text-xs font-medium text-[#ddffdc] flex items-center gap-1.5 font-['Space_Grotesk']">
+                <Terminal size={12} className="text-[#7fee64]" /> Live winget Telemetry
               </span>
-              <button onClick={() => { setLogs([]); setError(null); }} className="text-xs text-hk-muted hover:text-white">Clear</button>
+              <button onClick={() => { setLogs([]); setError(null); }} className="text-xs text-[#8cab87] hover:text-[#ddffdc]">Clear</button>
             </div>
             {error && (
-              <div className="p-2 mb-2 rounded bg-hk-red/10 border border-hk-red/30 text-hk-red text-xs flex items-center gap-1.5">
-                <AlertCircle size={12} /> {error}
+              <div className="p-2.5 mb-3 rounded-lg bg-[#f87171]/10 border border-[#f87171]/30 text-[#f87171] text-xs flex items-center gap-2">
+                <AlertCircle size={13} /> {error}
               </div>
             )}
-            <div className="flex-1 font-mono text-[11px] text-hk-emerald overflow-auto whitespace-pre-wrap leading-relaxed bg-hk-bg p-2 rounded border border-hk-border">
+            <div className="flex-1 font-mono text-[11px] text-[#7fee64] overflow-auto whitespace-pre-wrap leading-relaxed bg-[#000000] p-3 rounded-lg border border-[#485346]">
               {logs.join('')}
-              {installingId && <span className="inline-block w-2 h-3 bg-hk-emerald ml-1 animate-pulse" />}
+              {installingId && <span className="inline-block w-2 h-3 bg-[#7fee64] ml-1 animate-pulse" />}
             </div>
           </div>
         )}

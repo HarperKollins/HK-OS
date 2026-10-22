@@ -115,7 +115,7 @@ function createWindow() {
     backgroundColor: '#090D16',
     title: 'HK OS — The Learning Operating System',
     autoHideMenuBar: true,
-    show: false, // will show when ready
+    show: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       contextIsolation: true,
@@ -123,6 +123,14 @@ function createWindow() {
       sandbox: false,
       webviewTag: true
     }
+  });
+
+  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`[Renderer Console ${level}] ${message} (${sourceId}:${line})`);
+  });
+
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+    console.error(`[Renderer Fail Load] ${errorCode}: ${errorDescription}`);
   });
 
   const indexPath = path.join(__dirname, '../dist/renderer/index.html');
@@ -134,10 +142,8 @@ function createWindow() {
     });
   }
 
-  mainWindow.once('ready-to-show', () => {
-    mainWindow.show();
-    mainWindow.focus();
-  });
+  mainWindow.show();
+  mainWindow.focus();
 
   setTimeout(() => {
     if (mainWindow && !mainWindow.isVisible()) {

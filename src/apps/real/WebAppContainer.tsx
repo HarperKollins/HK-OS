@@ -13,32 +13,32 @@ export const WebAppContainer: React.FC<{ app: AppManifest }> = ({ app }) => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-hk-bg overflow-hidden">
+    <div className="h-full flex flex-col bg-[#000000] overflow-hidden font-['Inter']">
       {/* Web App Toolbar */}
-      <div className="flex items-center justify-between px-3 py-1.5 border-b border-hk-border bg-hk-surface/80 text-xs">
+      <div className="flex items-center justify-between px-3 py-1.5 border-b border-[#485346] bg-[#181818] text-xs">
         <div className="flex items-center gap-2 truncate">
-          <span className="text-white font-medium">{app.name}</span>
-          <span className="text-[11px] font-mono text-hk-muted truncate">{app.url}</span>
+          <span className="text-[#ddffdc] font-medium font-['Space_Grotesk']">{app.name}</span>
+          <span className="text-[11px] font-mono text-[#8cab87] truncate">{app.url}</span>
         </div>
         <div className="flex items-center gap-2">
           {/* Google Sign-in helper pill */}
           <button
             onClick={handleOpenExternal}
-            className="flex items-center gap-1 px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 text-[10px] hover:bg-yellow-500/20"
+            className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#212525] text-[#9cbf93] border border-[#485346] text-[10px] hover:border-[#7fee64] hover:text-[#ddffdc] transition-all"
             title="Open in your default system browser if Google OAuth is blocked"
           >
-            <ShieldAlert size={10} /> Google Sign-in Fix
+            <ShieldAlert size={10} className="text-[#7fee64]" /> External OAuth
           </button>
           <button
             onClick={() => setKey(k => k + 1)}
-            className="p-1 text-hk-muted hover:text-white rounded hover:bg-white/5"
+            className="p-1 text-[#8cab87] hover:text-[#ddffdc] rounded-lg hover:bg-[#212525] transition-all"
             title="Reload webview"
           >
             <RefreshCw size={11} />
           </button>
           <button
             onClick={handleOpenExternal}
-            className="flex items-center gap-1 p-1 text-hk-blue hover:text-white rounded"
+            className="flex items-center gap-1 p-1 text-[#7fee64] hover:text-[#ddffdc] rounded-lg hover:bg-[#212525] transition-all"
             title="Open in system browser"
           >
             <ExternalLink size={11} />
@@ -47,7 +47,7 @@ export const WebAppContainer: React.FC<{ app: AppManifest }> = ({ app }) => {
       </div>
 
       {/* Web Container Body */}
-      <div className="flex-1 relative bg-hk-bg overflow-hidden">
+      <div className="flex-1 relative bg-[#000000] overflow-hidden">
         {isElectron ? (
           // In Electron, use native webview with persistent partition for login sessions!
           // @ts-ignore

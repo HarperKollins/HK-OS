@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
   Brain, FileText, Code2, FlaskConical, Folder, Store,
-  Terminal, Globe, Minus, Square, Copy, X, Play
+  Terminal, Globe, Play
 } from 'lucide-react';
 import { useWindowStore, type WindowInstance } from '../../store/windowStore';
 import { WebAppContainer } from '../../apps/real/WebAppContainer';
@@ -81,8 +81,8 @@ export const AppWindow: React.FC<{ win: WindowInstance }> = ({ win }) => {
       const dw = moveEvent.clientX - dragRef.current.startX;
       const dh = moveEvent.clientY - dragRef.current.startY;
       updateWindowBounds(win.id, {
-        width: Math.max(380, dragRef.current.origW + dw),
-        height: Math.max(260, dragRef.current.origH + dh)
+        width: Math.max(400, dragRef.current.origW + dw),
+        height: Math.max(280, dragRef.current.origH + dh)
       });
     };
 
@@ -102,7 +102,7 @@ export const AppWindow: React.FC<{ win: WindowInstance }> = ({ win }) => {
   let style: React.CSSProperties = {
     position: 'absolute',
     zIndex: win.zIndex,
-    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)'
+    boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px #485346',
   };
 
   if (win.isMaximized) {
@@ -119,82 +119,87 @@ export const AppWindow: React.FC<{ win: WindowInstance }> = ({ win }) => {
     <div
       style={style}
       onMouseDown={() => focusWindow(win.id)}
-      className={`flex flex-col bg-hk-bg border border-hk-border rounded-xl overflow-hidden transition-all duration-75 select-none ${
-        isDragging ? 'opacity-90 cursor-move' : ''
+      className={`flex flex-col bg-[#181818] border border-[#485346] rounded-xl overflow-hidden transition-all duration-75 select-none ${
+        isDragging ? 'opacity-95 cursor-move' : ''
       } ${isResizing ? 'select-none pointer-events-auto' : ''}`}
     >
-      {/* Real Window Titlebar */}
+      {/* Modal Phosphor Window Titlebar */}
       <div
         onMouseDown={handleMouseDownHeader}
-        className="h-9 px-3 bg-hk-surface border-b border-hk-border flex items-center justify-between cursor-move shrink-0"
+        className="h-10 px-3 bg-[#212525] border-b border-[#485346] flex items-center justify-between cursor-move shrink-0"
       >
-        <div className="flex items-center gap-2 min-w-0">
-          <IconComponent size={15} className="text-hk-blue shrink-0" />
-          <span className="text-xs font-semibold text-white truncate">{win.title}</span>
-          <span className="text-[10px] px-1.5 py-0.2 rounded bg-hk-bg border border-hk-border text-hk-muted uppercase">
-            {win.app.type}
-          </span>
+        {/* Left: Traffic Light Dots + App Identity */}
+        <div className="flex items-center gap-3 min-w-0">
+          {/* Traffic light control dots */}
+          <div className="flex items-center gap-1.5 shrink-0" onMouseDown={e => e.stopPropagation()}>
+            <button
+              onClick={() => closeWindow(win.id)}
+              className="w-3 h-3 rounded-full bg-[#f87171] hover:brightness-125 transition-all flex items-center justify-center group"
+              title="Close window"
+            >
+              <span className="opacity-0 group-hover:opacity-100 text-[8px] text-black font-bold">×</span>
+            </button>
+            <button
+              onClick={() => minimizeWindow(win.id)}
+              className="w-3 h-3 rounded-full bg-[#fbbf24] hover:brightness-125 transition-all flex items-center justify-center group"
+              title="Minimize window"
+            >
+              <span className="opacity-0 group-hover:opacity-100 text-[8px] text-black font-bold">−</span>
+            </button>
+            <button
+              onClick={() => maximizeWindow(win.id)}
+              className="w-3 h-3 rounded-full bg-[#7fee64] hover:brightness-125 transition-all flex items-center justify-center group"
+              title={win.isMaximized ? 'Restore window' : 'Maximize window'}
+            >
+              <span className="opacity-0 group-hover:opacity-100 text-[7px] text-black font-bold">+</span>
+            </button>
+          </div>
+
+          <div className="w-px h-3.5 bg-[#485346]" />
+
+          <div className="flex items-center gap-2 truncate">
+            <IconComponent size={14} className="text-[#7fee64] shrink-0" />
+            <span className="text-xs font-medium text-[#ddffdc] tracking-tight truncate font-['Inter']">
+              {win.title}
+            </span>
+            <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-[#485346] text-[#9cbf93] bg-[#181818]">
+              {win.app.type}
+            </span>
+          </div>
         </div>
 
-        {/* Window Controls */}
+        {/* Right: Window Snapping Controls */}
         <div className="flex items-center gap-1 shrink-0" onMouseDown={e => e.stopPropagation()}>
           {/* Snap Left */}
           <button
             onClick={() => snapWindow(win.id, 'left')}
-            className={`p-1.5 rounded hover:bg-white/10 text-hk-muted hover:text-white transition-colors ${
-              win.isSnapped === 'left' ? 'text-hk-blue bg-hk-blue/10' : ''
+            className={`px-2 py-1 rounded text-[11px] font-mono border transition-all ${
+              win.isSnapped === 'left'
+                ? 'bg-[#7fee64]/10 border-[#7fee64] text-[#7fee64]'
+                : 'border-[#485346] text-[#8cab87] hover:text-[#ddffdc] hover:border-[#8cab87]'
             }`}
-            title="Snap Left (50%)"
+            title="Snap 50% Left"
           >
-            <div className="w-3 h-3 border border-current rounded-sm flex">
-              <div className="w-1.5 h-full bg-current opacity-70" />
-            </div>
+            ◧ 50% L
           </button>
 
           {/* Snap Right */}
           <button
             onClick={() => snapWindow(win.id, 'right')}
-            className={`p-1.5 rounded hover:bg-white/10 text-hk-muted hover:text-white transition-colors ${
-              win.isSnapped === 'right' ? 'text-hk-blue bg-hk-blue/10' : ''
+            className={`px-2 py-1 rounded text-[11px] font-mono border transition-all ${
+              win.isSnapped === 'right'
+                ? 'bg-[#7fee64]/10 border-[#7fee64] text-[#7fee64]'
+                : 'border-[#485346] text-[#8cab87] hover:text-[#ddffdc] hover:border-[#8cab87]'
             }`}
-            title="Snap Right (50%)"
+            title="Snap 50% Right"
           >
-            <div className="w-3 h-3 border border-current rounded-sm flex justify-end">
-              <div className="w-1.5 h-full bg-current opacity-70" />
-            </div>
-          </button>
-
-          {/* Minimize */}
-          <button
-            onClick={() => minimizeWindow(win.id)}
-            className="p-1.5 rounded hover:bg-white/10 text-hk-muted hover:text-white transition-colors"
-            title="Minimize"
-          >
-            <Minus size={12} />
-          </button>
-
-          {/* Maximize */}
-          <button
-            onClick={() => maximizeWindow(win.id)}
-            className="p-1.5 rounded hover:bg-white/10 text-hk-muted hover:text-white transition-colors"
-            title={win.isMaximized ? 'Restore' : 'Maximize'}
-          >
-            {win.isMaximized ? <Copy size={11} /> : <Square size={11} />}
-          </button>
-
-          {/* Close */}
-          <button
-            onClick={() => closeWindow(win.id)}
-            className="p-1.5 rounded hover:bg-hk-red/20 text-hk-muted hover:text-hk-red transition-colors ml-1"
-            title="Close"
-          >
-            <X size={13} />
+            ◨ 50% R
           </button>
         </div>
       </div>
 
       {/* App Content Stage */}
-      <div className="flex-1 overflow-hidden relative select-text">
+      <div className="flex-1 overflow-hidden relative select-text bg-[#000000]">
         {win.app.type === 'web' && (
           <WebAppContainer app={win.app} />
         )}
@@ -210,21 +215,23 @@ export const AppWindow: React.FC<{ win: WindowInstance }> = ({ win }) => {
         )}
 
         {win.app.type === 'native' && (
-          <div className="h-full flex flex-col items-center justify-center p-8 text-center bg-hk-bg">
-            <div className="w-16 h-16 rounded-2xl bg-hk-surface border border-hk-border flex items-center justify-center mb-4 text-hk-blue">
-              <Terminal size={32} />
+          <div className="h-full flex flex-col items-center justify-center p-8 text-center bg-[#000000]">
+            <div className="w-16 h-16 rounded-xl bg-[#181818] border border-[#485346] flex items-center justify-center mb-4 text-[#7fee64]">
+              <Terminal size={30} />
             </div>
-            <h3 className="text-base font-bold text-white mb-1">{win.app.name}</h3>
-            <p className="text-xs text-hk-muted mb-4 font-mono">Native Executable: {win.app.executable}</p>
+            <h3 className="text-base font-medium text-[#ddffdc] mb-1">{win.app.name}</h3>
+            <p className="text-xs text-[#8cab87] mb-5 font-mono">
+              host binary: <span className="text-[#ddffdc]">{win.app.executable}</span>
+            </p>
             <button
               onClick={() => {
                 if (win.app.executable && window.hkos?.launchNative) {
                   window.hkos.launchNative(win.app.executable);
                 }
               }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-hk-blue text-white text-xs font-semibold hover:bg-hk-blue/90 transition-colors shadow-lg shadow-hk-blue/20"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#7fee64] text-[#000000] text-xs font-semibold hover:brightness-110 transition-all shadow-[0_0_15px_rgba(127,238,100,0.3)]"
             >
-              <Play size={13} fill="white" /> Launch Native Process
+              <Play size={13} fill="#000000" /> Spawn Native Subprocess
             </button>
           </div>
         )}
@@ -234,7 +241,7 @@ export const AppWindow: React.FC<{ win: WindowInstance }> = ({ win }) => {
       {!win.isMaximized && !win.isSnapped && (
         <div
           onMouseDown={handleMouseDownResize}
-          className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize z-50 flex items-center justify-center text-hk-muted/40 hover:text-white"
+          className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize z-50 flex items-center justify-center text-[#485346] hover:text-[#7fee64]"
         >
           <div className="w-1.5 h-1.5 border-r border-b border-current" />
         </div>

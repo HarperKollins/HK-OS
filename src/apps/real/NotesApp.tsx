@@ -83,121 +83,127 @@ export const NotesApp: React.FC = () => {
   const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
 
   return (
-    <div className="h-full flex flex-col bg-hk-bg text-white font-sans">
+    <div className="h-full flex flex-col bg-[#000000] text-[#ddffdc] font-['Inter']">
       {/* App Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-hk-border bg-hk-surface">
-        <div className="flex items-center gap-2">
-          <FileText size={16} className="text-hk-emerald" />
-          <span className="text-sm font-semibold">Real Notes</span>
-          <span className="text-xs text-hk-muted">Documents/HK OS/Notes</span>
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#485346] bg-[#181818]">
+        <div className="flex items-center gap-2.5">
+          <FileText size={15} className="text-[#7fee64]" />
+          <span className="text-xs font-semibold text-[#ddffdc] font-['Space_Grotesk']">Markdown Notebook</span>
+          <span className="text-[11px] font-mono text-[#8cab87]">Documents/HK OS/Notes</span>
         </div>
-        <div className="flex items-center gap-2">
-          {status && <span className="text-xs text-hk-emerald font-mono">{status}</span>}
-          <span className="text-xs text-hk-muted mr-2">{wordCount} words</span>
+        <div className="flex items-center gap-2.5">
+          {status && <span className="text-xs text-[#7fee64] font-mono">{status}</span>}
+          <span className="text-xs text-[#8cab87] mr-1">{wordCount} words</span>
           <button
             onClick={() => setPreview(!preview)}
-            className={`px-2.5 py-1 text-xs rounded border transition-colors ${
-              preview ? 'bg-hk-blue/20 border-hk-blue text-hk-blue' : 'border-hk-border text-hk-muted hover:text-white'
+            className={`px-3 py-1 text-xs rounded-lg border transition-all ${
+              preview
+                ? 'bg-[#7fee64]/10 border-[#7fee64] text-[#7fee64]'
+                : 'border-[#485346] bg-[#212525] text-[#8cab87] hover:text-[#ddffdc] hover:border-[#8cab87]'
             }`}
           >
-            {preview ? 'Edit' : 'Preview'}
+            {preview ? 'Source Code' : 'Preview'}
           </button>
           <button
             onClick={saveFile}
             disabled={!activeFile}
-            className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded bg-hk-emerald text-black hover:bg-hk-emerald/90 transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 px-3.5 py-1 text-xs font-semibold rounded-full bg-[#7fee64] text-[#000000] hover:brightness-110 transition-all disabled:opacity-40"
           >
-            <Save size={12} /> Save to Disk
+            <Save size={12} /> Save
           </button>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden">
         {/* File Sidebar */}
-        <div className="w-56 border-r border-hk-border bg-hk-surface/40 flex flex-col shrink-0">
-          <div className="p-2 border-b border-hk-border flex items-center justify-between">
-            <span className="text-xs font-semibold text-hk-muted flex items-center gap-1">
-              <Folder size={12} /> Notes on Disk
+        <div className="w-56 border-r border-[#485346] bg-[#181818] flex flex-col shrink-0">
+          <div className="p-2.5 border-b border-[#485346] flex items-center justify-between">
+            <span className="text-xs font-medium text-[#9cbf93] flex items-center gap-1.5 uppercase tracking-[0.05em] text-[10px]">
+              <Folder size={11} className="text-[#7fee64]" /> Notes Files
             </span>
             <div className="flex items-center gap-1">
-              <button onClick={loadFiles} className="p-1 hover:text-white text-hk-muted">
-                <RefreshCw size={12} />
+              <button onClick={loadFiles} className="p-1 hover:text-[#ddffdc] text-[#8cab87]" title="Refresh">
+                <RefreshCw size={11} />
               </button>
-              <button onClick={() => setIsCreating(true)} className="p-1 hover:text-hk-emerald text-hk-muted">
-                <Plus size={14} />
+              <button onClick={() => setIsCreating(true)} className="p-1 hover:text-[#7fee64] text-[#8cab87]" title="New note">
+                <Plus size={13} />
               </button>
             </div>
           </div>
 
           {isCreating && (
-            <div className="p-2 border-b border-hk-border bg-hk-bg">
+            <div className="p-2.5 border-b border-[#485346] bg-[#212525]">
               <input
                 value={newFileName}
                 onChange={e => setNewFileName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && createFile()}
                 placeholder="note_name.md"
                 autoFocus
-                className="w-full px-2 py-1 bg-hk-surface border border-hk-border rounded text-xs text-white outline-none focus:border-hk-blue"
+                className="w-full px-2 py-1 bg-[#181818] border border-[#485346] rounded text-xs text-[#ddffdc] outline-none focus:border-[#7fee64]"
               />
-              <div className="flex justify-end gap-1 mt-1">
-                <button onClick={() => setIsCreating(false)} className="text-[10px] text-hk-muted px-1.5 py-0.5">Cancel</button>
-                <button onClick={createFile} className="text-[10px] bg-hk-blue px-2 py-0.5 rounded text-white font-medium">Create</button>
+              <div className="flex justify-end gap-1.5 mt-2">
+                <button onClick={() => setIsCreating(false)} className="text-[11px] text-[#8cab87] px-2 py-0.5">Cancel</button>
+                <button onClick={createFile} className="text-[11px] bg-[#7fee64] px-2.5 py-0.5 rounded text-[#000000] font-semibold">Create</button>
               </div>
             </div>
           )}
 
-          <div className="flex-1 overflow-y-auto p-1 space-y-0.5">
+          <div className="flex-1 overflow-y-auto p-1.5 space-y-0.5">
             {files.map(f => (
               <div
                 key={f.name}
                 onClick={() => loadFile(f.name)}
-                className={`flex items-center justify-between px-2.5 py-1.5 rounded cursor-pointer text-xs group transition-colors ${
-                  activeFile === f.name ? 'bg-hk-blue/20 text-white font-medium' : 'text-hk-muted hover:bg-white/5 hover:text-white'
+                className={`group flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs cursor-pointer transition-all ${
+                  activeFile === f.name
+                    ? 'bg-[#212525] border border-[#7fee64] text-[#ddffdc]'
+                    : 'text-[#8cab87] hover:bg-[#212525] hover:text-[#ddffdc]'
                 }`}
               >
-                <span className="truncate flex-1">{f.name}</span>
+                <span className="truncate">{f.name}</span>
                 <button
-                  onClick={(e) => { e.stopPropagation(); deleteFile(f.name); }}
-                  className="opacity-0 group-hover:opacity-100 hover:text-hk-red transition-opacity p-0.5"
+                  onClick={e => {
+                    e.stopPropagation();
+                    if (window.confirm(`Delete ${f.name}?`)) deleteFile(f.name);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 hover:text-[#f87171] text-[#677d64] p-0.5"
+                  title="Delete file"
                 >
                   <Trash2 size={11} />
                 </button>
               </div>
             ))}
             {files.length === 0 && (
-              <p className="text-hk-muted text-xs p-3 text-center">No notes yet. Click + to create one.</p>
+              <p className="text-xs text-[#677d64] p-3 italic">No notes found. Click + to create one.</p>
             )}
           </div>
         </div>
 
-        {/* Editor Area */}
-        <div className="flex-1 flex flex-col bg-hk-bg overflow-hidden">
+        {/* Editor or Markdown Preview */}
+        <div className="flex-1 flex flex-col bg-[#000000] overflow-hidden">
           {activeFile ? (
-            !preview ? (
+            preview ? (
+              <div className="flex-1 p-6 overflow-y-auto prose prose-invert max-w-3xl text-sm leading-relaxed text-[#ddffdc]">
+                {content.split('\n').map((line, i) => {
+                  if (line.startsWith('# ')) return <h1 key={i} className="text-2xl font-bold text-[#ddffdc] mb-3 pb-1 border-b border-[#485346] font-['Space_Grotesk']">{line.slice(2)}</h1>;
+                  if (line.startsWith('## ')) return <h2 key={i} className="text-lg font-bold text-[#ddffdc] mt-4 mb-2 font-['Space_Grotesk']">{line.slice(3)}</h2>;
+                  if (line.startsWith('- ')) return <li key={i} className="text-[#8cab87] ml-4">{line.slice(2)}</li>;
+                  if (!line.trim()) return <div key={i} className="h-3" />;
+                  return <p key={i} className="text-[#8cab87] mb-2">{line}</p>;
+                })}
+              </div>
+            ) : (
               <textarea
                 value={content}
                 onChange={e => setContent(e.target.value)}
-                className="flex-1 p-6 bg-transparent text-white font-mono text-sm leading-6 resize-none outline-none"
-                placeholder="Type your markdown notes..."
-                spellCheck={false}
+                placeholder="Type your notes here..."
+                className="flex-1 w-full bg-[#000000] p-6 text-sm text-[#ddffdc] font-mono leading-relaxed outline-none resize-none caret-[#7fee64]"
+                style={{ fontFamily: 'JetBrains Mono, monospace' }}
               />
-            ) : (
-              <div className="flex-1 p-6 overflow-y-auto prose prose-invert max-w-none text-sm leading-6">
-                <div dangerouslySetInnerHTML={{
-                  __html: content
-                    .replace(/^# (.*$)/gim, '<h1 class="text-xl font-bold text-white mb-3">$1</h1>')
-                    .replace(/^## (.*$)/gim, '<h2 class="text-base font-semibold text-hk-blue mt-4 mb-2">$1</h2>')
-                    .replace(/^### (.*$)/gim, '<h3 class="text-sm font-semibold text-white mt-3 mb-1">$1</h3>')
-                    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-                    .replace(/^- (.*$)/gim, '<li class="ml-4 list-disc text-hk-muted">$1</li>')
-                    .replace(/\n/gim, '<br />')
-                }} />
-              </div>
             )
           ) : (
-            <div className="flex-1 flex items-center justify-center text-hk-muted text-sm">
-              Select or create a note on the left
+            <div className="flex-1 flex flex-col items-center justify-center text-[#677d64]">
+              <FileText size={32} className="mb-2 opacity-40 text-[#7fee64]" />
+              <p className="text-xs">Select or create a note file to begin editing.</p>
             </div>
           )}
         </div>

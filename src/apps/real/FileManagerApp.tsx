@@ -71,90 +71,98 @@ export const FileManagerApp: React.FC = () => {
   }, []);
 
   return (
-    <div className="h-full flex flex-col bg-hk-bg text-white font-sans">
+    <div className="h-full flex flex-col bg-[#000000] text-[#ddffdc] font-['Inter']">
       {/* Navigation Bar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-hk-border bg-hk-surface">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#485346] bg-[#181818]">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={navigateUp}
             disabled={!currentPath}
-            className="p-1 rounded hover:bg-white/5 disabled:opacity-30 text-hk-muted hover:text-white"
+            className="p-1 rounded-lg border border-[#485346] bg-[#212525] disabled:opacity-30 text-[#8cab87] hover:text-[#ddffdc] transition-all"
+            title="Go up"
           >
-            <ArrowLeft size={14} />
+            <ArrowLeft size={13} />
           </button>
-          <span className="text-xs font-mono text-hk-blue font-medium">Documents/HK OS/{currentPath}</span>
+          <span className="text-xs font-mono text-[#7fee64] font-medium">
+            Documents/HK OS{currentPath ? `/${currentPath}` : ''}
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => loadDirectory()} className="p-1 text-hk-muted hover:text-white">
+          <button onClick={() => loadDirectory()} className="p-1 text-[#8cab87] hover:text-[#ddffdc] transition-colors" title="Reload directory">
             <RefreshCw size={13} />
           </button>
           <button
             onClick={() => { setNewType('folder'); setIsCreating(true); }}
-            className="px-2 py-1 text-xs border border-hk-border rounded text-hk-muted hover:text-white flex items-center gap-1"
+            className="px-3 py-1 text-xs border border-[#485346] rounded-lg text-[#8cab87] hover:text-[#ddffdc] hover:border-[#8cab87] transition-all flex items-center gap-1.5"
           >
-            <Plus size={11} /> New Folder
+            <Plus size={11} /> Folder
           </button>
           <button
             onClick={() => { setNewType('file'); setIsCreating(true); }}
-            className="px-2.5 py-1 text-xs bg-hk-blue text-white rounded font-medium flex items-center gap-1"
+            className="px-3 py-1 text-xs bg-[#7fee64] text-[#000000] rounded-full font-semibold hover:brightness-110 transition-all flex items-center gap-1.5"
           >
-            <Plus size={11} /> New File
+            <Plus size={11} /> File
           </button>
         </div>
       </div>
 
       {isCreating && (
-        <div className="p-3 border-b border-hk-border bg-hk-surface flex items-center gap-2 animate-fadeIn">
-          <span className="text-xs text-hk-muted">Create {newType}:</span>
+        <div className="p-3 border-b border-[#485346] bg-[#212525] flex items-center gap-2.5 animate-fadeIn">
+          <span className="text-xs text-[#9cbf93] font-mono">Create {newType}:</span>
           <input
             value={newName}
             onChange={e => setNewName(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleCreate()}
             placeholder={newType === 'folder' ? 'folder_name' : 'filename.txt'}
             autoFocus
-            className="px-2 py-1 bg-hk-bg border border-hk-border rounded text-xs text-white outline-none focus:border-hk-blue"
+            className="px-3 py-1 bg-[#181818] border border-[#485346] rounded-lg text-xs text-[#ddffdc] outline-none focus:border-[#7fee64]"
           />
-          <button onClick={handleCreate} className="px-3 py-1 bg-hk-emerald text-black text-xs font-bold rounded">Create</button>
-          <button onClick={() => setIsCreating(false)} className="px-2 py-1 text-xs text-hk-muted">Cancel</button>
+          <button onClick={handleCreate} className="px-3 py-1 bg-[#7fee64] text-[#000000] text-xs font-semibold rounded-lg hover:brightness-110">
+            Create
+          </button>
+          <button onClick={() => setIsCreating(false)} className="px-2 py-1 text-xs text-[#8cab87]">
+            Cancel
+          </button>
         </div>
       )}
 
       <div className="flex-1 flex overflow-hidden">
-        {/* File & Folder Grid */}
-        <div className="flex-1 p-4 overflow-y-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        {/* File & Folder Grid (Modal Workload Card Style) */}
+        <div className="flex-1 p-5 overflow-y-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5">
             {items.map(item => (
               <div
                 key={item.name}
                 onClick={() => item.isDirectory ? navigateTo(item.name) : previewFile(item.name)}
-                className={`p-3 rounded-xl border border-hk-border bg-hk-surface/50 hover:border-hk-blue/40 cursor-pointer flex flex-col justify-between group transition-all ${
-                  selectedFile?.endsWith(item.name) ? 'border-hk-blue bg-hk-blue/10' : ''
+                className={`p-3.5 rounded-lg border bg-[#1f2a33] hover:border-[#7fee64] hover:bg-[#212525] cursor-pointer flex flex-col justify-between group transition-all duration-200 ${
+                  selectedFile?.endsWith(item.name) ? 'border-[#7fee64] bg-[#212525]' : 'border-[#485346]'
                 }`}
               >
                 <div className="flex items-start justify-between">
                   {item.isDirectory ? (
-                    <Folder size={28} className="text-yellow-400 fill-yellow-400/20" />
+                    <Folder size={26} className="text-[#fbbf24]" />
                   ) : (
-                    <FileText size={28} className="text-hk-emerald" />
+                    <FileText size={26} className="text-[#7fee64]" />
                   )}
                   <button
                     onClick={(e) => handleDelete(item.name, e)}
-                    className="opacity-0 group-hover:opacity-100 hover:text-hk-red text-hk-muted p-1"
+                    className="opacity-0 group-hover:opacity-100 hover:text-[#f87171] text-[#677d64] p-1 transition-opacity"
+                    title="Delete item"
                   >
                     <Trash2 size={12} />
                   </button>
                 </div>
-                <div className="mt-2">
-                  <p className="text-xs font-medium text-white truncate">{item.name}</p>
-                  <p className="text-[10px] text-hk-muted">
-                    {item.isDirectory ? 'Directory' : `${(item.size / 1024).toFixed(1)} KB`}
+                <div className="mt-3">
+                  <p className="text-xs font-medium text-[#ddffdc] truncate font-['Space_Grotesk']">{item.name}</p>
+                  <p className="text-[10px] text-[#8cab87] font-mono mt-0.5">
+                    {item.isDirectory ? 'directory' : `${(item.size / 1024).toFixed(1)} KB`}
                   </p>
                 </div>
               </div>
             ))}
             {items.length === 0 && (
-              <div className="col-span-full py-12 text-center text-hk-muted text-xs">
-                This directory is empty on disk.
+              <div className="col-span-full py-16 text-center text-[#677d64] text-xs font-mono">
+                [empty directory on host disk]
               </div>
             )}
           </div>
@@ -162,12 +170,12 @@ export const FileManagerApp: React.FC = () => {
 
         {/* File Content Preview Panel */}
         {selectedFile && (
-          <div className="w-80 border-l border-hk-border bg-hk-surface/30 p-4 flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between pb-2 border-b border-hk-border mb-3">
-              <span className="text-xs font-semibold text-white truncate">{selectedFile.split('/').pop()}</span>
-              <button onClick={() => setSelectedFile(null)} className="text-xs text-hk-muted hover:text-white">✕</button>
+          <div className="w-80 border-l border-[#485346] bg-[#181818] p-4 flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between pb-2.5 border-b border-[#485346] mb-3">
+              <span className="text-xs font-medium text-[#ddffdc] truncate font-mono">{selectedFile.split('/').pop()}</span>
+              <button onClick={() => setSelectedFile(null)} className="text-xs text-[#8cab87] hover:text-[#ddffdc]">✕</button>
             </div>
-            <pre className="flex-1 font-mono text-xs text-hk-muted overflow-auto whitespace-pre-wrap leading-relaxed p-2 bg-hk-bg rounded border border-hk-border">
+            <pre className="flex-1 font-mono text-xs text-[#ddffdc] overflow-auto whitespace-pre-wrap leading-relaxed p-3 bg-[#000000] rounded-lg border border-[#485346]">
               {fileContent}
             </pre>
           </div>
