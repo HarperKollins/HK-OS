@@ -1,11 +1,8 @@
 import React from 'react';
-import { Boot } from './shell/Boot';
-import { Desktop } from './shell/Desktop';
-import { useSystemStore } from './store/systemStore';
+import { LearningShell } from './shell/real/LearningShell';
 
 const App: React.FC = () => {
-  const bootState = useSystemStore(s => s.bootState);
-  return bootState === 'booting' ? <Boot /> : <Desktop />;
+  return <LearningShell />;
 };
 
 export default App;
